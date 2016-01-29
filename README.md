@@ -1,9 +1,22 @@
 # FSharp-InversionOfControl-Demo
-Demonstration with commentary to illustrate IoC for testing in F#.
 
-### TODO: intro
+A demonstration with commentary to illustrate IoC for testing in F#.
 
-### Module A_Composed
+A lot of well-written code is very hard to test. The aim of this exercise is to show how to refactor code so that it can be well tested via simple refactorings.
+
+
+# Code commentary
+
+## Introduction
+
+This solution has a series of modules, where a codebase evolves into a form of being testable via Inversion of Control.
+
+The code's purpose is to pair interns up with senior engineers, and submit the results to some endpoint (via a web post). We expect an exception to be thrown if there aren't enough senior engineers to be matched up with the interns.
+
+
+## Module A_Composed
+
+Module A_Composed is our starting point.
 
 This code is well modularized. *postData()* is doing operational work, *getPairs()* has business logic, and *matchInterns()* orchestrates everything.
 
@@ -18,7 +31,7 @@ What all of this means is that while our code is cleanly modularlized for a regu
 We also have another problem here, which is that even when we run tests, we're going to be making actual web posts. If we were to write tests for this code in its current state, we could have a hosted endpoint that receives posts in testing scenarios, and we can pass that endpoint into *matchInterns()*, but this is overly complex and slow, if not unreliable. That might be a good solution for end-to-end testing, but not for unit tests. Solving this problem is annoying, but conceptually easy, so let's knock it out first.
 
 
-### Module B_ComposedIsolated
+## Module B_ComposedIsolated
 
 *WebClient* is a sealed class that doesn't have a strong interface. If it wasn't sealed, we could potentially inherit from it to build a fake, and if it had a clean interface, we could make a mock out of that.
 
@@ -31,7 +44,7 @@ As a result of our change, *postData()* is now fully testable because we can sup
 Note how we have to pass *webClient* into *matchInterns()*, even though it doesn't do anything but pass it along - let's fix that with partial application.
 
 
-### Module C_IsolatedWithRegistration
+## Module C_IsolatedWithRegistration
 
 When we partially apply parameters to *postData()*, type inference kicks in and the generic type gets resolved. There is an example of this in the code that is commented out - it doesn't compile, because it resolves *postData'()* to *Pair* because it's the first type that it can infer; it then rejects our attempt to post *Seniors* within the same function. To work around this, we have to let the generic type resolve in two different statements, and pass them into *matchInterns()* independently. The use of inline doesn't make this any easier.
 
@@ -46,7 +59,7 @@ An important thing to note is that our new function is composing *matchInterns()
 Now that we have a pattern for inverting control - let's follow through and fully isolate *matchInterns()*.
 
 
-### Module D_InvertedControlWithWiring
+## Module D_InvertedControlWithWiring
 
 Now that *getPairs()'* function signature is passed in as a parameter into *matchInterns()*, we can test all of our original functions in isolation.
 
@@ -57,7 +70,7 @@ Now that *getPairs()'* function signature is passed in as a parameter into *matc
 The only piece that's outstanding is the fact that in our regular production flow, we want to use a real *WebClient*. Something, somewhere needs to own this, so let's handle that.
 
 
-### Module E_InvertedControlWithRegistration
+## Module E_InvertedControlWithRegistration
 
 We could have created another function to do this, but really this is just an extension of the wire-up process that *registerDependenciesAndMatch()* was already handling. In a larger codebase, it might even make sense to separate *registerDependenciesAndMatch()* into another module, so that we don't mistake it for something that has no dependencies. This function isn't going to be used in our unit tests, but we could use it in testing the codebase as a whole.
 
