@@ -44,3 +44,14 @@ An interesting effect of *matchInterns()* having no knowledge of what a post is,
 An important thing to note is that our new function is composing *matchInterns()* and *postData()*. We haven't really removed function composition from our codebase, but we've established a pattern where we can bring it into a special function with that explicit purpose. This function is going to be hard to test, but if we keep it pure, it should have little to no business logic anyway.
 
 Now that we have a pattern for inverting control - let's follow through and fully isolate *matchInterns()*.
+
+
+### Module D_InvertedControlWithWiring
+
+Now that *getPairs()'* function signature is passed in as a parameter into *matchInterns()*, we can test all of our original functions in isolation.
+
+<img src="images/IoC_DependencyTree_DE.png" alt="Drawing" width="400" />
+
+*getPairs()* was changed to return a *lazy*, so that we can test exceptions without them firing off before the test is run.
+
+The only piece that's outstanding is the fact that in our regular production flow, we want to use a real *WebClient*. Something, somewhere needs to own this, so let's handle that.
