@@ -1,8 +1,8 @@
 # FSharp-InversionOfControl-Demo
 
-A demonstration with commentary to illustrate IoC for testing in F#.
+*A demonstration with commentary to illustrate Inversion of Control for testing in F#.*
 
-A lot of well-written code is very hard to test. The aim of this exercise is to show how to refactor code so that it can be well tested via simple refactorings.
+A lot of well-written code is very hard to test. The aim of this exercise is to show how to refactor code so that it can be tested properly.
 
 
 # Code commentary
@@ -11,7 +11,7 @@ A lot of well-written code is very hard to test. The aim of this exercise is to 
 
 This solution has a series of modules, where a codebase evolves into a form of being testable via Inversion of Control.
 
-The code's purpose is to pair interns up with senior engineers, and submit the results to some endpoint (via a web post). We expect an exception to be thrown if there aren't enough senior engineers to be matched up with the interns.
+The code's purpose is to pair interns up with senior engineers, then submit the results to some endpoint (via a web post). We expect an exception to be thrown if there aren't enough senior engineers to be matched up with the interns.
 
 
 ## Module A_Composed
