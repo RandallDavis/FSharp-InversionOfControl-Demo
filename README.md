@@ -1,4 +1,4 @@
-# FSharp-InversionOfControl-Demo
+# FSharp Inversion Of Control demo
 
 *A demonstration with commentary to illustrate Inversion of Control for testing in F#.*
 
