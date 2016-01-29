@@ -55,3 +55,12 @@ Now that *getPairs()'* function signature is passed in as a parameter into *matc
 *getPairs()* was changed to return a *lazy*, so that we can test exceptions without them firing off before the test is run.
 
 The only piece that's outstanding is the fact that in our regular production flow, we want to use a real *WebClient*. Something, somewhere needs to own this, so let's handle that.
+
+
+### Module E_InvertedControlWithRegistration
+
+We could have created another function to do this, but really this is just an extension of the wire-up process that *registerDependenciesAndMatch()* was already handling. In a larger codebase, it might even make sense to separate *registerDependenciesAndMatch()* into another module, so that we don't mistake it for something that has no dependencies. This function isn't going to be used in our unit tests, but we could use it in testing the codebase as a whole.
+
+Dependency Injection frameworks are often used for this wire-up, but in F#, I find myself being a lot less concerned with managing object scope and life cycles, so going for a full-fledged framework to manage this can create obscurity without bringing the measure of value that it provides to imperative languages.
+
+Our code doubled in size from our starting point, but now both our code and our unit tests are logical and modularized!
