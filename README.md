@@ -22,7 +22,7 @@ This code is well modularized. *postData()* is doing operational work, *getPairs
 
 <p align="center"><img src="images/IoC_DependencyTree_A.png" alt="Drawing" width="400" /></p>
 
-The diagram above expresses the dependencies between functions. From a testing perspective, we can only test *getPairs()* independently from the other functions because it has no dependencies on other code. One of the major difficulties we have here is that in order to test *matchInterns()*, our tests have reflect business logic from *getPairs()*. __*TODO: show that testing for failure conditions requires seniors.length to be less than interns.length*__
+The diagram above expresses the dependencies between functions. From a testing perspective, we can only test *getPairs()* independently from the other functions because it has no dependencies on other code. One of the major difficulties we have here is that in order to test *matchInterns()*, our tests have reflect business logic from *getPairs()*.
 * This business logic has nothing to do with *matchInterns()*'s purpose.
 * Changes to *getPairs()* will likely cause changes to *matchInterns()*'s tests.
 
