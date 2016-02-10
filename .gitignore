@@ -1,0 +1,5 @@
+src/packages/
+src/IocDemo/bin/
+src/IocDemo.Tests/obj/
+src/IocDemo.Tests/bin/
+src/IocDemo/obj/Debug/
