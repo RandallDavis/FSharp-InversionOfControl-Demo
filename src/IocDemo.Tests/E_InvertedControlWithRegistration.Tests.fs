@@ -8,6 +8,8 @@ open IocDemo.Prelude
 open IocDemo.E_InvertedControlWithRegistration
 open IocDemoTests.Prelude
 
+// Changes: no changes
+
 module E_InvertedControlWithRegistration =
 
     //Note: this is in no away an adequate set of unit tests - only ones that are interesting to the demo are implemented

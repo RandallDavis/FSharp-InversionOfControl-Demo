@@ -21,14 +21,16 @@ module C_IsolatedWithRegistration =
             member this.UploadStringAsync (uri:Uri) (data:string) : Async<unit> =
                 failwith "forced exception" |> async.Return
 
-    let webClient = WebClientFake ()
-    let webClient_Throw = WebClientFake_Throw ()
+    let webClientFake = WebClientFake ()
+    let webClientFake_Throw = WebClientFake_Throw ()
 
-    let postDataPair (_:Pair) = async.Return ()
-    let postDataPair_Throw (_:Pair) = failwith "forced exception" |> async.Return
+    // Changes: these are new
+    let postDataPairFake (_:Pair) = async.Return ()
+    let postDataPairFake_Throw (_:Pair) = failwith "forced exception" |> async.Return
 
-    let postDataSenior (_:Senior) = async.Return ()
-    let postDataSenior_Throw (_:Senior) = failwith "forced exception" |> async.Return
+    // Changes: these are new
+    let postDataSeniorFake (_:Senior) = async.Return ()
+    let postDataSeniorFake_Throw (_:Senior) = failwith "forced exception" |> async.Return
 
 
     let [<Fact>] ``getPairs fails if less seniors than interns`` () =
@@ -36,16 +38,17 @@ module C_IsolatedWithRegistration =
 
 
     let [<Fact>] ``postData bubbles exceptions from webClient`` () =
-        Assert.Throws<Exception> (fun _ -> postData webClient_Throw uri "some data" |> Async.RunSynchronously |> ignore )
+        Assert.Throws<Exception> (fun _ -> postData webClientFake_Throw uri "some data" |> Async.RunSynchronously |> ignore )
 
 
     let [<Fact>] ``matchInterns succeeds`` () =
-        let result = matchInterns postDataPair postDataSenior (generateInternList 2) (generateSeniorList 3) |> Async.RunSynchronously
+        let result = matchInterns postDataPairFake postDataSeniorFake (generateInternList 2) (generateSeniorList 3) |> Async.RunSynchronously
         Assert.Equal((), result)
 
     // the only way to get matchInterns() to receive an exception from getPairs is to trigger a known error condition
     let [<Fact>] ``matchInterns bubbles exceptions from getPairs`` () =
-        Assert.Throws<Exception> (fun _ -> matchInterns postDataPair postDataSenior (generateInternList 2) (generateSeniorList 1) |> Async.RunSynchronously |> ignore)
+        Assert.Throws<Exception> (fun _ -> matchInterns postDataPairFake postDataSeniorFake (generateInternList 2) (generateSeniorList 1) |> Async.RunSynchronously |> ignore)
 
+    // Changes: this is new, replacing a throw from WebClient with a more direct throw from postData()
     let [<Fact>] ``matchInterns bubbles exceptions from postData`` () =
-        Assert.Throws<Exception> (fun _ -> matchInterns postDataPair_Throw postDataSenior (generateInternList 2) (generateSeniorList 3) |> Async.RunSynchronously |> ignore)
+        Assert.Throws<Exception> (fun _ -> matchInterns postDataPairFake_Throw postDataSeniorFake (generateInternList 2) (generateSeniorList 3) |> Async.RunSynchronously |> ignore)

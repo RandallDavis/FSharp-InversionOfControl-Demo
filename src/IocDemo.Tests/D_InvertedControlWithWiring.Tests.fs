@@ -30,6 +30,7 @@ module D_InvertedControlWithWiring =
     let postDataSeniorFake (_:Senior) = async.Return ()
     let postDataSeniorFake_Throw (_:Senior) = failwith "forced exception" |> async.Return
 
+    // Changes: these are new
     let getPairsFake (_:Intern list) (_:Senior list) : Lazy<Pair list * Senior list> = lazy(generatePairList 2, generateSeniorList 3)
     let getPairsFake_Throw (_:Intern list) (_:Senior list) : Lazy<Pair list * Senior list> = lazy(failwith "forced exception")
 
@@ -46,6 +47,7 @@ module D_InvertedControlWithWiring =
         let result = matchInterns getPairsFake postDataPairFake postDataSeniorFake (generateInternList 2) (generateSeniorList 3) |> Async.RunSynchronously
         Assert.Equal((), result)
 
+    // Changes: this has a faked exception in getPairs() rather than having getPairs-related business logic to trigger an exception
     let [<Fact>] ``matchInterns bubbles exceptions from getPairs`` () =
         Assert.Throws<Exception> (fun _ -> matchInterns getPairsFake_Throw postDataPairFake postDataSeniorFake (generateInternList 1) (generateSeniorList 1) |> Async.RunSynchronously |> ignore)
 
