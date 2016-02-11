@@ -5,6 +5,13 @@ open System.Net
 open System.Text
 open IocDemo.Prelude
 
+(*
+    Changes:
+    - matchInterns() now takes in postDataPair and postDataSenior as parameters and no longer receives an IWebClientWrapper.
+    - registerDependenciesAndMatch() was added to partially apply IWebClientWrappers to postData() and pass them into matchInterns().
+    - Commented out code illustrates how generics get bound improperly.
+*)
+
 module C_IsolatedWithRegistration =
 
     type IWebClientWrapper =
@@ -32,7 +39,6 @@ module C_IsolatedWithRegistration =
             | (_, _, _) -> failwith "Uncovered case"
         getPairs'[] interns seniors
         
-
     let matchInterns (postDataPair:Pair -> Async<unit>) (postDataSenior:Senior -> Async<unit>)
                      (interns:Intern list) (seniors:Senior list) : Async<unit> = async {
         let (pairs, remainingSeniors) = getPairs interns seniors

@@ -5,6 +5,11 @@ open System.Net
 open System.Text
 open IocDemo.Prelude
 
+(*
+    Changes:
+    - registerDependenciesAndMatch() is changed to create a WebClientWrapper rather than receive an IWebClientWrapper.
+*)
+
 module E_InvertedControlWithRegistration =
 
     type IWebClientWrapper =

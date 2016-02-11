@@ -5,6 +5,14 @@ open System.Net
 open System.Text
 open IocDemo.Prelude
 
+(*
+    Changes:
+    - IWebClientWrapper was added.
+    - WebClientWrapper was added.
+    - postData() now receives an IWebClientWrapper as a parameter and has string to byte array conversions migrated into WebClientWrapper.
+    - matchInterns() now receives an IWebClientWrapper, which it passes to postData().
+*)
+
 module B_ComposedIsolated =
 
     type IWebClientWrapper =
@@ -31,7 +39,6 @@ module B_ComposedIsolated =
             | (acc, i::iL, s::sL) -> getPairs' ((i, s)::acc) iL sL
             | (_, _, _) -> failwith "Uncovered case"
         getPairs'[] interns seniors
-        
 
     let matchInterns (webClient:IWebClientWrapper) (postUri:Uri) (interns:Intern list) (seniors:Senior list) : Async<unit> = async {
         let (pairs, remainingSeniors) = getPairs interns seniors

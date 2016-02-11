@@ -5,6 +5,13 @@ open System.Net
 open System.Text
 open IocDemo.Prelude
 
+(*
+    Changes:
+    - getPairs() was changed to return a Lazy so that we can better test it.
+    - matchInterns() receives getPairs'() as a parameter.
+    - registerDependenciesAndMatch() passes getPairs() into matchInterns().
+*)
+
 module D_InvertedControlWithWiring =
 
     type IWebClientWrapper =
@@ -32,7 +39,6 @@ module D_InvertedControlWithWiring =
             | (_, _, _) -> failwith "Uncovered case"
         getPairs'[] interns seniors
         
-
     let matchInterns (getPairs':Intern list -> Senior list -> Lazy<Pair list * Senior list>)
                      (postDataPair:Pair -> Async<unit>) (postDataSenior:Senior -> Async<unit>)
                      (interns:Intern list) (seniors:Senior list) : Async<unit> = async {

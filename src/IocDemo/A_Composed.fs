@@ -21,7 +21,6 @@ module A_Composed =
             | (acc, i::iL, s::sL) -> getPairs' ((i, s)::acc) iL sL
             | (_, _, _) -> failwith "Uncovered case"
         getPairs'[] interns seniors
-        
 
     let matchInterns (postUri:Uri) (interns:Intern list) (seniors:Senior list) : Async<unit> = async {
         let (pairs, remainingSeniors) = getPairs interns seniors
